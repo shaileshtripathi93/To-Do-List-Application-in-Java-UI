@@ -1,0 +1,70 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class h extends JFrame {
+
+    private DefaultListModel<String> taskListModel;
+    private JList<String> taskList;
+    private JTextField taskInput;
+
+    public h() {
+        // Set up the main frame
+        setTitle("To-Do List");
+        setSize(300, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        // Initialize components
+        taskListModel = new DefaultListModel<>();
+        taskList = new JList<>(taskListModel);
+        taskInput = new JTextField();
+        JButton addButton = new JButton("Add Task");
+        JButton deleteButton = new JButton("Delete Task");
+
+        // Set layout
+        setLayout(new BorderLayout());
+
+        // Add components to the frame
+        add(taskInput, BorderLayout.NORTH);
+        add(new JScrollPane(taskList), BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(addButton);
+        buttonPanel.add(deleteButton);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        // Add ActionListener for the add button
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String task = taskInput.getText().trim();
+                if (!task.isEmpty()) {
+                    taskListModel.addElement(task);
+                    taskInput.setText("");
+                }
+            }
+        });
+
+        // Add ActionListener for the delete button
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedIndex = taskList.getSelectedIndex();
+                if (selectedIndex != -1) {
+                    taskListModel.remove(selectedIndex);
+                }
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new h().setVisible(true);
+            }
+        });
+    }
+}
